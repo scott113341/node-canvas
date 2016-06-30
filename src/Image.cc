@@ -10,6 +10,7 @@
 #include <string.h>
 #include <errno.h>
 #include <node_buffer.h>
+#include <librsvg/rsvg.h>
 
 #ifdef HAVE_GIF
 typedef struct {
@@ -198,6 +199,7 @@ Image::loadFromBuffer(uint8_t *buf, unsigned len) {
   uint8_t data[4] = {0};
   memcpy(data, buf, (len < 4 ? len : 4) * sizeof(uint8_t));
 
+  if (isSVG(data)) return loadSVGFromBuffer(buf, len);
   if (isPNG(data)) return loadPNGFromBuffer(buf);
 #ifdef HAVE_GIF
   if (isGIF(data)) return loadGIFFromBuffer(buf, len);
@@ -219,6 +221,22 @@ Image::loadFromBuffer(uint8_t *buf, unsigned len) {
 #endif
 #endif
   return CAIRO_STATUS_READ_ERROR;
+}
+
+/*
+ * Load SVG data from `buf`.
+ */
+
+cairo_status_t
+Image::loadSVGFromBuffer(uint8_t *buf, unsigned len) {
+  RsvgHandle *handle = rsvg_handle_new_from_data(buf, len, NULL);
+  RsvgDimensionData *dims = new RsvgDimensionData();
+  rsvg_handle_get_dimensions(handle, dims);
+  _surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, dims->width, dims->height);
+  cairo_t *cr = cairo_create(_surface);
+  gboolean ok = rsvg_handle_render_cairo(handle, cr);
+  if (ok) return CAIRO_STATUS_SUCCESS;
+  else return CAIRO_STATUS_READ_ERROR;
 }
 
 /*
@@ -971,4 +989,13 @@ Image::isGIF(uint8_t *data) {
 int
 Image::isPNG(uint8_t *data) {
   return 'P' == data[1] && 'N' == data[2] && 'G' == data[3];
+}
+
+/*
+ * Sniff bytes 0..3 for "<svg".
+ */
+
+int
+Image::isSVG(uint8_t *data) {
+  return '<' == data[0] && 's' == data[1] && 'v' == data[2] && 'g' == data[3];
 }

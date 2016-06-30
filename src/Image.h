@@ -53,10 +53,12 @@ class Image: public Nan::ObjectWrap {
     static int isPNG(uint8_t *data);
     static int isJPEG(uint8_t *data);
     static int isGIF(uint8_t *data);
+    static int isSVG(uint8_t *data);
     static cairo_status_t readPNG(void *closure, unsigned char *data, unsigned len);
     inline int isComplete(){ return COMPLETE == state; }
     cairo_status_t loadSurface();
     cairo_status_t loadFromBuffer(uint8_t *buf, unsigned len);
+    cairo_status_t loadSVGFromBuffer(uint8_t *buf, unsigned len);
     cairo_status_t loadPNGFromBuffer(uint8_t *buf);
     cairo_status_t loadPNG();
     void clearData();
