@@ -1,9 +1,9 @@
 #! /usr/bin/env node
 
 /**
- * imports two svg files from disk
- * adds them to the canvas
- * renders the canvas to demo-1.png
+ * defines an svg as a string with an embedded base64 png
+ * adds it to the canvas
+ * renders the canvas to demo-2.png
  */
 
 const Canvas = require('./../index.js');
