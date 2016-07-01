@@ -46,7 +46,7 @@ const svgString = `
 
 // convert to a buffer and add to the canvas
 const svg = new Canvas.Image;
-svg.src = Buffer.from(svgString);
+svg.src = new Buffer(svgString);
 ctx.drawImage(svg, 50, 50, 300, 300);
 
 
