@@ -9,7 +9,6 @@
 const Canvas = require('./../index.js');
 const fs = require('fs');
 const path = require('path');
-const saveCanvas = require('./save-canvas.js');
 
 
 // make canvas
@@ -52,4 +51,6 @@ ctx.drawImage(svg, 50, 50, 300, 300);
 
 
 // render canvas to png
-saveCanvas(canvas, 'demo-2.png');
+const stream = canvas.pngStream();
+const out = fs.createWriteStream(path.join(__dirname, 'demo-2.png'));
+stream.on('data', chunk => out.write(chunk));
