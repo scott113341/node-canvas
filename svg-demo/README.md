@@ -2,11 +2,11 @@
 
 Make sure you have `librsvg` installed (as well as the other dependencies in the main README):
 
-OSX: `brew install librsvg`
-Ubuntu: `sudo apt-get install librsvg2-dev` // should work, but untested
-Fedora: `sudo yum install librsvg2-devel` // should work, but untested
-Solaris: ???
-Windows: ???
+OSX: `brew install librsvg`  
+Ubuntu: `sudo apt-get install librsvg2-dev` // should work, but untested  
+Fedora: `sudo yum install librsvg2-devel` // should work, but untested  
+Solaris: ???  
+Windows: ???  
 
 
 From project root:
